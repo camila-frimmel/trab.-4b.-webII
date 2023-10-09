@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>TRABALHO 4º BIMESTRE</title>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/cdb.min.css" />
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+        <script src="http://unpkg.com/vue@next"></script>
+
+    </head>
+</head>
+<body> 
+    <div id="divPrincipal">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#57c6ca ;">
+            <div class="container-xl">
+                <a class="navbar-brand" href="#">
+                    <h2>Trabalho 4º B</h2>
+                </a>
+                <button class="navbar-toggler" 
+                        type="button" data-bs-toggle="collapse" data-bs-target="#navbarPrincipal" 
+                        aria-controls="navbarPrincipal" 
+                        aria-expanded="false" 
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarPrincipal">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a v-on:click="message = 'Estado'" class="nav-link" aria-current="page" href="#">Estado</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a v-on:click="message = 'Cidade'" class="nav-link" aria-current="page" href="#">Cidade</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a v-on:click="message = 'Bairros'" class="nav-link" aria-current="page" href="#">Bairros</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a v-on:click="message = 'Endereço'" class="nav-link" aria-current="page" href="#">Endereço</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="bg-light p-5 rounded">
+            <div class="col-sm-8 mx-auto">
+                <h1 class="jumbotron">{{ message }}</h1>
+                
+                <!-- Form cidade -->
+                <div v-show="message == 'Cidade'">
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="observacoes" v-model="cidade.nome">
+                        <label for="observacoes">Cidade</label>
+                    </div>
+
+                    <button class="mt-3 mb-3 btn btn-primary" 
+                    @click="addCidade()">Adicionar</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Cidade</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in cidade">
+                                <th scope="row">{{ item.id }}</th>
+                                <td>{{ item.nome }}</td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button @click="editCidade(item)" class="btn btn-info">Editar</button>
+                                        <button @click="removeCidade(item)" class="btn btn-danger">Excluir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Form estado -->
+                <div v-show="message == 'Estado'">
+                    
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="nome" v-model="estado.nome">
+                        <label for="nome">Estado</label>
+                    </div>
+
+                    <button class="mt-3 mb-3 btn btn-primary" 
+                    @click="addEstado()">Adicionar</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in estado">
+                                <th scope="row">{{ item.id }}</th>
+                                <td>{{ item.nome }}</td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button @click="editEstado(item)" class="btn btn-info">Editar</button>
+                                        <button @click="removeEstado(item)" class="btn btn-danger">Excluir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Form Bairros -->
+                <div v-show="message == 'Bairros'">
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="descricao" v-model="bairro.descricao">
+                        <label for="descricao">Bairro</label>
+                    </div>
+
+                    <button class="mt-3 mb-3 btn btn-primary" 
+                    @click="addBairros()">Adicionar</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Bairro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in bairros">
+                                <th scope="row">{{ item.id }}</th>
+                                <td>{{ item.descricao }}</td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button @click="editBairros(item)" class="btn btn-info">Editar</button>
+                                        <button @click="removeBairros(item)" class="btn btn-danger">Excluir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Form endereço -->
+                <div v-show="message == 'Endereço'">
+               
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="Sequencia" v-model="endereco.logradouro">
+                        <label for="Sequencia">Logradouro</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="numero" v-model="endereco.numero">
+                        <label for="numero">Número</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="complemento" v-model="endereco.complemento">
+                        <label for="complemento">Complemento</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="Sequencia" v-model="endereco.cep">
+                        <label for="Sequencia">CEP</label>
+                    </div>
+
+                    <button class="mt-3 mb-3 btn btn-primary" 
+                    @click="addEndereco()">Adicionar</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Logradouro</th>
+                                <th scope="col">Numero</th>
+                                <th scope="col">Complemento</th>
+                                <th scope="col">CEP</th>
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in endereco">
+                                <th scope="row">{{ item.id }}</th>
+                                <td>{{ item.logradouro }}</td>
+                                <td>{{ item.numero }}</td>
+                                <td>{{ item.complemento }}</td>
+                                <td>{{ item.cep }}</td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button @click="editEndereco(item)" class="btn btn-info">Editar</button>
+                                        <button @click="removeEndereco(item)" class="btn btn-danger">Excluir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+    <script>
+        const meuPrimeiroApp = Vue.createApp({
+            data() {
+                return {
+                    message: 'Estado',
+                    estado: {
+                        id: 0,
+                        nome: null
+                    },
+                    cidade: {
+                        id: 0,
+                        nome: null
+                    },
+                    bairro: {
+                        id: 0,
+                        descricao: null
+                    },
+                    endereco: {
+                        id: 0,
+                        logradouro: null,
+                        numero: null,
+                        complemento: null,
+                        cep: null
+                    },
+                    
+                    indexEstado: null,
+                    indexCidade: null,
+                    indexBairro: null,
+                    indexEndereço: null,
+
+                    estado: [],
+                    cidade: [],
+                    bairros: [],
+                    endereco: [],
+
+                }
+            },
+            methods: {
+            
+                // Form Cidade
+                addCidade() {			
+                    if(this.cidade.id === 0) {
+                        this.cidade.id = this.cidade.length + 1
+                        this.cidade.push(this.cidade)
+                        
+                    } else {
+                        this.cidade[this.indexCidade] = this.cidade
+                    }
+                    localStorage.setItem('cidade', JSON.stringify(this.cidade))
+                    this.cidade = {id: 0, nome: null}
+                },
+                
+                removeCidade(item) {
+                    const indexCidade = this.cidade.indexOf(item)
+                    this.cidade.splice(indexAgendamentos, 1)
+                    localStorage.setItem('cidade', JSON.stringify(this.cidade))
+                }, 
+                
+                editCidade(item) {
+                    this.indexCidade = this.cidade.indexOf(item)
+                    this.cidade = Object.assign({}, item);
+                    localStorage.setItem('cidade', JSON.stringify(this.cidade))
+                },		
+
+                // Form Estado
+                addEstado() {			
+                    if(this.estado.id === 0) {
+                        this.estado.id = this.estado.length + 1
+                        this.estado.push(this.estado)
+                        
+                    } else {
+                        this.estado[this.indexEstado] = this.estado
+                    }
+                    localStorage.setItem('estado', JSON.stringify(this.estado))
+                    this.estado = {id: 0, nome: null}
+                },
+                
+                removeEstado(item) {
+                    const idxEstado = this.estado.indexOf(item)
+                    this.estado.splice(idxEstado, 1)
+                    localStorage.setItem('agentes', JSON.stringify(this.estado))
+                }, 
+                
+                editEstado(item) {
+                    this.indexEstado = this.estado.indexOf(item)
+                    this.estado = Object.assign({}, item);
+                    localStorage.setItem('estado', JSON.stringify(this.estado))
+                },		
+
+
+                // Form Bairro
+                addBairros() {			
+                    if(this.bairro.id === 0) {
+                        this.bairro.id = this.bairros.length + 1
+                        this.bairros.push(this.bairro)
+                        
+                    } else {
+                        this.bairros[this.indexBairro] = this.bairro
+                    }
+                    localStorage.setItem('bairros', JSON.stringify(this.bairros))
+                    this.bairro = {id: 0, name: null, telephone: null}
+                },
+                
+                removeBairros(item) {
+                    const idxBairro = this.bairros.indexOf(item)
+                    this.bairros.splice(idxBairro, 1)
+                    localStorage.setItem('bairros', JSON.stringify(this.bairros))
+                }, 
+                
+                editBairros(item) {
+                    this.indexBairro = this.bairros.indexOf(item)
+                    this.bairro = Object.assign({}, item);
+                    localStorage.setItem('bairros', JSON.stringify(this.bairros))
+                },
+                
+                // Form Endereço
+                addEndereco() {			
+                if(this.endereco.id === 0) {
+                    this.endereco.id = this.endereco.length + 1
+                    this.endereco.push(this.endereco)
+                    
+                } else {
+                    this.endereco[this.indexEndereço] = this.endereco
+                }
+                localStorage.setItem('endereco', JSON.stringify(this.endereco))
+                this.endereco = {id: 0, 
+                                logradouro: null,
+                                numero: null,
+                                complemento: null,
+                                cep: null
+                            }
+            },
+
+                removeEndereco(item) {
+                    const idxEndereço = this.endereco.indexOf(item)
+                    this.endereco.splice(idxEndereço, 1)
+                    localStorage.setItem('endereco', JSON.stringify(this.endereco))
+                }, 
+                
+                editEndereco(item) {
+                    this.indexEndereço = this.endereco.indexOf(item)
+                    this.endereco = Object.assign({}, item);
+                    localStorage.setItem('endereco', JSON.stringify(this.endereco))
+                }
+
+            }
+        })
+    
+        const mountedApp = meuPrimeiroApp.mount('#divPrincipal')
+    </script>    
+</body>
+</html>
